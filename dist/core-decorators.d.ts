@@ -1,4 +1,4 @@
-import type { PieceContext, PieceOptions } from '@sapphire/pieces';
+import type { PieceContext, PieceOptions } from '@sapphire/framework';
 /**
  * Decorator function that applies given options to any Sapphire piece
  * @example
