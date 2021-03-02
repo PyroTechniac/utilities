@@ -1,7 +1,7 @@
 import type { EmojiIdentifierResolvable } from 'discord.js';
 export interface IMessagePrompterStrategyOptions {
-    timeout: number;
-    explicitReturn: boolean;
+    timeout?: number;
+    explicitReturn?: boolean;
 }
 export interface IMessagePrompterConfirmStrategyOptions extends IMessagePrompterStrategyOptions {
     confirmEmoji?: string | EmojiIdentifierResolvable;

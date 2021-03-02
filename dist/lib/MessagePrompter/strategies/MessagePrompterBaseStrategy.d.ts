@@ -39,6 +39,6 @@ export declare abstract class MessagePrompterBaseStrategy {
     /**
      * The default strategy options
      */
-    static defaultStrategyOptions: IMessagePrompterStrategyOptions;
+    static defaultStrategyOptions: Required<IMessagePrompterStrategyOptions>;
 }
 //# sourceMappingURL=MessagePrompterBaseStrategy.d.ts.map
