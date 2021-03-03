@@ -1,2 +1,256 @@
-!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t((e="undefined"!=typeof globalThis?globalThis:e||self).SapphireSnowflake={})}(this,(function(e){"use strict";function __classPrivateFieldGet(e,t){if(!t.has(e))throw new TypeError("attempted to get private field on non-instance");return t.get(e)}var t,n;class Snowflake{constructor(e){t.set(this,0n),n.set(this,void 0),Object.defineProperty(this,"decode",{enumerable:!0,configurable:!0,writable:!0,value:this.deconstruct}),function __classPrivateFieldSet(e,t,n){if(!t.has(e))throw new TypeError("attempted to set private field on non-instance");return t.set(e,n),n}(this,n,BigInt(e))}generate({increment:e=__classPrivateFieldGet(this,t),timestamp:r=Date.now(),workerID:o=1n,processID:i=1n}={increment:__classPrivateFieldGet(this,t),timestamp:Date.now(),workerID:1n,processID:1n}){if(r instanceof Date&&(r=BigInt(r)),"number"!=typeof r||Number.isNaN(r)||(r=BigInt(r)),"bigint"!=typeof r)throw new TypeError(`"timestamp" argument must be a number, BigInt or Date (received ${Number.isNaN(r)?"NaN":typeof r})`);return e>=4095n&&(e=0n),r-__classPrivateFieldGet(this,n)<<22n|o<<17n|i<<12n|e++}deconstruct(e){const t=BigInt(e);return{id:t,timestamp:(t>>22n)+__classPrivateFieldGet(this,n),workerID:t>>17n&31n,processID:t>>12n&31n,increment:4095n&t,epoch:__classPrivateFieldGet(this,n)}}}t=new WeakMap,n=new WeakMap;class DiscordSnowflake extends Snowflake{constructor(){super(DiscordSnowflake.Epoch)}static deconstruct(e){return(new DiscordSnowflake).deconstruct(e)}static generate(e={timestamp:Date.now()}){return(new DiscordSnowflake).generate(e)}}Object.defineProperty(DiscordSnowflake,"Epoch",{enumerable:!0,configurable:!0,writable:!0,value:1420070400000n}),Object.defineProperty(DiscordSnowflake,"decode",{enumerable:!0,configurable:!0,writable:!0,value:DiscordSnowflake.deconstruct});class TwitterSnowflake extends Snowflake{constructor(){super(TwitterSnowflake.Epoch)}static deconstruct(e){return(new TwitterSnowflake).deconstruct(e)}static generate(e={timestamp:Date.now()}){return(new TwitterSnowflake).generate(e)}}Object.defineProperty(TwitterSnowflake,"Epoch",{enumerable:!0,configurable:!0,writable:!0,value:1142974214000n}),Object.defineProperty(TwitterSnowflake,"decode",{enumerable:!0,configurable:!0,writable:!0,value:TwitterSnowflake.deconstruct}),e.DiscordSnowflake=DiscordSnowflake,e.Snowflake=Snowflake,e.TwitterSnowflake=TwitterSnowflake,Object.defineProperty(e,"__esModule",{value:!0})}));
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+    typeof define === 'function' && define.amd ? define(['exports'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.SapphireSnowflake = {}));
+}(this, (function (exports) { 'use strict';
+
+    /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation.
+
+    Permission to use, copy, modify, and/or distribute this software for any
+    purpose with or without fee is hereby granted.
+
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+    REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+    AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+    INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+    LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+    OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+    PERFORMANCE OF THIS SOFTWARE.
+    ***************************************************************************** */
+
+    function __classPrivateFieldGet(receiver, privateMap) {
+        if (!privateMap.has(receiver)) {
+            throw new TypeError("attempted to get private field on non-instance");
+        }
+        return privateMap.get(receiver);
+    }
+
+    function __classPrivateFieldSet(receiver, privateMap, value) {
+        if (!privateMap.has(receiver)) {
+            throw new TypeError("attempted to set private field on non-instance");
+        }
+        privateMap.set(receiver, value);
+        return value;
+    }
+
+    /* eslint-disable @typescript-eslint/explicit-member-accessibility */
+    var _increment, _epoch;
+    /**
+     * A class for parsing snowflake ids
+     */
+    class Snowflake {
+        /**
+         * @param epoch the epoch to use
+         */
+        constructor(epoch) {
+            /**
+             * Internal incrementor for generating snowflakes
+             * @internal
+             */
+            _increment.set(this, 0n);
+            /**
+             * Internal reference of the epoch passed in the constructor
+             * @internal
+             */
+            _epoch.set(this, void 0);
+            /**
+             * Alias for {@link deconstruct}
+             */
+            // eslint-disable-next-line @typescript-eslint/unbound-method, @typescript-eslint/no-invalid-this
+            Object.defineProperty(this, "decode", {
+                enumerable: true,
+                configurable: true,
+                writable: true,
+                value: this.deconstruct
+            });
+            __classPrivateFieldSet(this, _epoch, BigInt(epoch));
+        }
+        /**
+         * Generates a snowflake given an epoch and optionally a timestamp
+         * @param options options to pass into the generator, see {@link SnowflakeGenerateOptions}
+         *
+         * **note** when increment is not provided it defaults to the private increment of the instance
+         * @example
+         * ```ts
+         * const epoch = new Date('2000-01-01T00:00:00.000Z');
+         * const snowflake = new Snowflake(epoch).generate();
+         * ```
+         * @returns A unique snowflake
+         */
+        generate({ increment = __classPrivateFieldGet(this, _increment), timestamp = Date.now(), workerID = 1n, processID = 1n } = {
+            increment: __classPrivateFieldGet(this, _increment),
+            timestamp: Date.now(),
+            workerID: 1n,
+            processID: 1n
+        }) {
+            if (timestamp instanceof Date)
+                timestamp = BigInt(timestamp);
+            if (typeof timestamp === 'number' && !Number.isNaN(timestamp))
+                timestamp = BigInt(timestamp);
+            if (typeof timestamp !== 'bigint') {
+                throw new TypeError(`"timestamp" argument must be a number, BigInt or Date (received ${Number.isNaN(timestamp) ? 'NaN' : typeof timestamp})`);
+            }
+            if (increment >= 4095n)
+                increment = 0n;
+            // timestamp, workerID, processID, increment
+            return ((timestamp - __classPrivateFieldGet(this, _epoch)) << 22n) | (workerID << 17n) | (processID << 12n) | increment++;
+        }
+        /**
+         * Deconstructs a snowflake given a snowflake ID
+         * @param id the snowflake to deconstruct
+         * @returns a deconstructed snowflake
+         * @example
+         * ```ts
+         * const epoch = new Date('2000-01-01T00:00:00.000Z');
+         * const snowflake = new Snowflake(epoch).deconstruct('3971046231244935168');
+         * ```
+         */
+        deconstruct(id) {
+            const bigIntId = BigInt(id);
+            return {
+                id: bigIntId,
+                timestamp: (bigIntId >> 22n) + __classPrivateFieldGet(this, _epoch),
+                workerID: (bigIntId >> 17n) & 31n,
+                processID: (bigIntId >> 12n) & 31n,
+                increment: bigIntId & 4095n,
+                epoch: __classPrivateFieldGet(this, _epoch)
+            };
+        }
+    }
+    _increment = new WeakMap(), _epoch = new WeakMap();
+
+    /**
+     * A class for parsing snowflake ids using Discord's snowflake epoch
+     *
+     * Which is 2015-01-01 at 00:00:00.000 UTC+0, {@link https://discord.com/developers/docs/reference#snowflakes}
+     */
+    class DiscordSnowflake extends Snowflake {
+        constructor() {
+            super(DiscordSnowflake.Epoch);
+        }
+        /**
+         * Deconstructs a snowflake given a snowflake ID
+         * @param id the snowflake to deconstruct
+         * @returns a deconstructed snowflake
+         * @example
+         * ```ts
+         * const snowflake = DiscordSnowflake.deconstruct('3971046231244935168');
+         * ```
+         */
+        static deconstruct(id) {
+            return new DiscordSnowflake().deconstruct(id);
+        }
+        /**
+         * Generates a snowflake given an epoch and optionally a timestamp
+         * @param options options to pass into the generator, see {@link SnowflakeGenerateOptions}
+         *
+         * **note** when increment is not provided it defaults to `0n`
+         * @example
+         * ```ts
+         * const snowflake = DiscordSnowflake.generate();
+         * ```
+         * @returns A unique snowflake
+         */
+        static generate(options = { timestamp: Date.now() }) {
+            return new DiscordSnowflake().generate(options);
+        }
+    }
+    /**
+     * Discord epoch (`2015-01-01T00:00:00.000Z`)
+     * @see {@link https://discord.com/developers/docs/reference#snowflakes}
+     */
+    Object.defineProperty(DiscordSnowflake, "Epoch", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: 1420070400000n
+    });
+    /**
+     * Deconstructs a snowflake given a snowflake ID
+     * @param id the snowflake to deconstruct
+     * @returns a deconstructed snowflake
+     * @example
+     * ```ts
+     * const snowflake = DiscordSnowflake.decode('3971046231244935168');
+     * ```
+     */
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    Object.defineProperty(DiscordSnowflake, "decode", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: DiscordSnowflake.deconstruct
+    });
+
+    /**
+     * A class for parsing snowflake ids using Twitter's snowflake epoch
+     *
+     * Which is 2006-03-21 at 20:50:14.000 UTC+0, the time and date of the first tweet ever made {@link https://twitter.com/jack/status/20}
+     */
+    class TwitterSnowflake extends Snowflake {
+        constructor() {
+            super(TwitterSnowflake.Epoch);
+        }
+        /**
+         * Deconstructs a snowflake given a snowflake ID
+         * @param id the snowflake to deconstruct
+         * @returns a deconstructed snowflake
+         * @example
+         * ```ts
+         * const snowflake = TwitterSnowflake.deconstruct('3971046231244935168');
+         * ```
+         */
+        static deconstruct(id) {
+            return new TwitterSnowflake().deconstruct(id);
+        }
+        /**
+         * Generates a snowflake given an epoch and optionally a timestamp
+         * @param options options to pass into the generator, see {@link SnowflakeGenerateOptions}
+         *
+         * **note** when increment is not provided it defaults to `0n`
+         * @example
+         * ```ts
+         * const snowflake = TwitterSnowflake.generate();
+         * ```
+         * @returns A unique snowflake
+         */
+        static generate(options = { timestamp: Date.now() }) {
+            return new TwitterSnowflake().generate(options);
+        }
+    }
+    /**
+     * Twitter epoch (`2006-03-21T20:50:14.000Z`)
+     * @see {@link https://twitter.com/jack/status/20}, first tweet ever made
+     */
+    Object.defineProperty(TwitterSnowflake, "Epoch", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: 1142974214000n
+    });
+    /**
+     * Deconstructs a snowflake given a snowflake ID
+     * @param id the snowflake to deconstruct
+     * @returns a deconstructed snowflake
+     * @example
+     * ```ts
+     * const snowflake = TwitterSnowflake.decode('3971046231244935168');
+     * ```
+     */
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    Object.defineProperty(TwitterSnowflake, "decode", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: TwitterSnowflake.deconstruct
+    });
+
+    exports.DiscordSnowflake = DiscordSnowflake;
+    exports.Snowflake = Snowflake;
+    exports.TwitterSnowflake = TwitterSnowflake;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
 //# sourceMappingURL=index.umd.js.map
