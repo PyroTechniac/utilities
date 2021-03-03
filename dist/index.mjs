@@ -1,2 +1,538 @@
-function arrayStrictEquals(e,n){if(e===n)return!0;if(e.length!==n.length)return!1;for(let t=0;t<e.length;t++)if(e[t]!==n[t]||typeof e[t]!=typeof n[t])return!1;return!0}function chunk(e,n){if(!Array.isArray(e))throw new TypeError("entries must be an array.");if(!Number.isInteger(n))throw new TypeError("chunkSize must be an integer.");if(n<1)throw new RangeError("chunkSize must be 1 or greater.");const t=e.slice(),r=[];for(;t.length;)r.push(t.splice(0,n));return r}function classExtends(e,n){let t=e;for(;null!==t;){if(t===n)return!0;t=Object.getPrototypeOf(t)}return!1}const e=String.fromCharCode(8203);function codeBlock(n,t){return"string"==typeof t?0===t.length?`\`\`\`${e}\`\`\``:`\`\`\`${n}\n${t.replace(/```/,`\`${e}\`\``).replace(/`$/g,`\`${e}`)}\`\`\``:`\`\`\`${n}\n${t||e}\`\`\``}function splitText(e,n,t=" "){const r=e.substring(0,n).lastIndexOf(t),o=-1===r?n:r;return e.substring(0,o)}function cutText(e,n){if(e.length<n)return e;const t=splitText(e,n-3);return t.length<n-3?`${t}...`:`${t.slice(0,n-3)}...`}function debounce(e,n={}){var t;let r,o,i,u,c=0;const s=null!==(t=n.wait)&&void 0!==t?t:0,l="number"==typeof n.maxWait?Math.max(n.maxWait,s):null;function invokeFunc(n){const t=r;return r=void 0,c=n,o=e(...t),o}function shouldInvoke(e){const n=e-u;return void 0===u||n>=s||n<0||null!==l&&e-c>=l}function timerExpired(){const e=Date.now();shouldInvoke(e)?trailingEdge(e):i=setTimeout(timerExpired,function remainingWait(e){const n=e-c,t=s-(e-u);return null===l?t:Math.min(t,l-n)}(e))}function trailingEdge(e){return i=void 0,invokeFunc(e)}function debounced(...e){const n=Date.now(),t=shouldInvoke(n);if(r=e,u=n,t){if(void 0===i)return function leadingEdge(e){return c=e,i=setTimeout(timerExpired,s),o}(u);if(null!==l)return i=setTimeout(timerExpired,s),invokeFunc(u)}return void 0===i&&(i=setTimeout(timerExpired,s)),o}return debounced.cancel=function cancel(){void 0!==i&&clearTimeout(i),c=0,r=void 0,u=void 0,i=void 0},debounced.flush=function flush(){return void 0===i?o:trailingEdge(Date.now())},debounced}function isObject(e){return!("object"!=typeof e||!e)&&e.constructor===Object}const n=["string","bigint","number","boolean"];function isPrimitive(e){return n.includes(typeof e)}function deepClone(e){if(null===e||isPrimitive(e))return e;if(Array.isArray(e)){const n=[];for(const t of e)n.push(deepClone(t));return n}if(isObject(e)){const n={};for(const[t,r]of Object.entries(e))n[t]=deepClone(r);return n}if(e instanceof Map){const n=new e.constructor;for(const[t,r]of e.entries())n.set(t,deepClone(r));return n}if(e instanceof Set){const n=new e.constructor;for(const t of e.values())n.add(deepClone(t));return n}return e}const t=String.fromCharCode(8203);function inlineCodeBlock(e){return`\`${e.replace(/ /g," ").replace(/`/g,`\`${t}`)}\``}function isClass(e){return"function"==typeof e&&"object"==typeof e.prototype}function isFunction(e){return"function"==typeof e}function isNullOrUndefined(e){return null==e}function isNumber(e){return"number"==typeof e&&!isNaN(e)&&Number.isFinite(e)}function isThenable(e){return"object"==typeof e&&null!==e&&(e instanceof Promise||e!==Promise.prototype&&function hasThen(e){return Reflect.has(e,"then")&&isFunction(e.then)}(e)&&function hasCatch(e){return Reflect.has(e,"catch")&&isFunction(e.catch)}(e))}function makeObject(e,n,t={}){if(e.includes(".")){const r=e.split("."),o=r.pop();let i=t;for(const e of r)i[e]||(i[e]={}),i=i[e];i[o]=n}else t[e]=n;return t}function mergeDefault(e,n){if(!n)return deepClone(e);for(const[t,r]of Object.entries(e)){const e=Reflect.get(n,t);void 0===e?Reflect.set(n,t,deepClone(r)):isObject(e)&&Reflect.set(n,t,mergeDefault(null!=r?r:{},e))}return n}function mergeObjects(e,n){for(const[t,r]of Object.entries(n)){const n=Reflect.get(e,t);isObject(r)?Reflect.set(e,t,isObject(n)?mergeObjects(n,r):r):isObject(n)||Reflect.set(e,t,r)}return e}function noop(){}function objectToTuples(e,n=""){const t=[];for(const[r,o]of Object.entries(e))isObject(o)?t.push(...objectToTuples(o,`${n}${r}.`)):t.push([`${n}${r}`,o]);return t}function parseURL(e){try{return new URL(e)}catch{return null}}function range(e,n,t){return new Array(Math.floor((n-e)/t)+1).fill(0).map(((n,r)=>e+r*t))}const r=/[-/\\^$*+?.()|[\]{}]/g;function regExpEsc(e){return e.replace(r,"\\$&")}function roundNumber(e,n=0){if(!e.toString().includes("e"))return Number(`${Math.round(Number(`${e}e+${n}`))}e-${n}`);const t=`${e}`.split("e");let r="";return Number(t[1])+n>0&&(r="+"),Number(`${Math.round(Number(`${Number(t[0])}e${r}${Number(t[1])+n}`))}e-${n}`)}const o=/[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g,i={textchannel:"TextChannel",voicechannel:"VoiceChannel",categorychannel:"CategoryChannel",guildmember:"GuildMember"};function toTitleCase(e){return e.replace(o,(e=>i[e]||e.charAt(0).toUpperCase()+e.substr(1).toLowerCase()))}function tryParse(e){try{return JSON.parse(e)}catch(n){return e}}export{arrayStrictEquals,chunk,classExtends,codeBlock,cutText,debounce,deepClone,inlineCodeBlock,isClass,isFunction,isNullOrUndefined,isNullOrUndefined as isNullish,isNumber,isObject,isPrimitive,isThenable,makeObject,mergeDefault,mergeObjects,noop,objectToTuples,parseURL,range,regExpEsc,roundNumber,splitText,toTitleCase,tryParse};
+/**
+ * Compare if both arrays are strictly equal
+ * @param arr1 The array to compare to
+ * @param arr2 The array to compare with
+ */
+function arrayStrictEquals(arr1, arr2) {
+    if (arr1 === arr2)
+        return true;
+    if (arr1.length !== arr2.length)
+        return false;
+    for (let i = 0; i < arr1.length; i++) {
+        if (arr1[i] !== arr2[i] || typeof arr1[i] !== typeof arr2[i])
+            return false;
+    }
+    return true;
+}
+
+/**
+ * Splits up an array into chunks
+ * @param array The array to chunk up
+ * @param chunkSize The size of each individual chunk
+ */
+function chunk(array, chunkSize) {
+    if (!Array.isArray(array))
+        throw new TypeError('entries must be an array.');
+    if (!Number.isInteger(chunkSize))
+        throw new TypeError('chunkSize must be an integer.');
+    if (chunkSize < 1)
+        throw new RangeError('chunkSize must be 1 or greater.');
+    const clone = array.slice();
+    const chunks = [];
+    while (clone.length)
+        chunks.push(clone.splice(0, chunkSize));
+    return chunks;
+}
+
+/**
+ * Checks whether or not the value class extends the base class.
+ * @param value The constructor to be checked against.
+ * @param base The base constructor.
+ */
+function classExtends(value, base) {
+    let ctor = value;
+    while (ctor !== null) {
+        if (ctor === base)
+            return true;
+        ctor = Object.getPrototypeOf(ctor);
+    }
+    return false;
+}
+
+const zws$1 = String.fromCharCode(8203);
+/**
+ * Wraps text in a markdown codeblock with optionally a language indicator for syntax highlighting
+ * @param language The codeblock language
+ * @param expression The expression to be wrapped in the codeblock
+ */
+function codeBlock(language, expression) {
+    if (typeof expression === 'string') {
+        if (expression.length === 0)
+            return `\`\`\`${zws$1}\`\`\``;
+        return `\`\`\`${language}\n${expression.replace(/```/, `\`${zws$1}\`\``).replace(/`$/g, `\`${zws$1}`)}\`\`\``;
+    }
+    return `\`\`\`${language}\n${expression || zws$1}\`\`\``;
+}
+
+/**
+ * Split a string by its latest space character in a range from the character 0 to the selected one.
+ * @param str The text to split.
+ * @param length The length of the desired string.
+ * @param char The character to split with
+ * @copyright 2019 Antonio Román
+ * @license Apache-2.0
+ */
+function splitText(str, length, char = ' ') {
+    const x = str.substring(0, length).lastIndexOf(char);
+    const pos = x === -1 ? length : x;
+    return str.substring(0, pos);
+}
+
+/**
+ * Split a text by its latest space character in a range from the character 0 to the selected one.
+ * @param str The text to split.
+ * @param length The length of the desired string.
+ * @copyright 2019 Antonio Román
+ * @license Apache-2.0
+ */
+function cutText(str, length) {
+    if (str.length < length)
+        return str;
+    const cut = splitText(str, length - 3);
+    if (cut.length < length - 3)
+        return `${cut}...`;
+    return `${cut.slice(0, length - 3)}...`;
+}
+
+/**
+ * lodash (Custom Build) <https://lodash.com/>
+ * Build: `lodash modularize exports="npm" -o ./`
+ * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+ * Released under MIT license <https://lodash.com/license>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ */
+/**
+ * Creates a debounced function that delays invoking func until after wait milliseconds have elapsed since
+ * the last time the debounced function was invoked. The debounced function comes with a cancel method to
+ * cancel delayed invocations and a flush method to immediately invoke them. Provide an options object to
+ * indicate that func should be invoked on the leading and/or trailing edge of the wait timeout. Subsequent
+ * calls to the debounced function return the result of the last func invocation.
+ *
+ * Note: If leading and trailing options are true, func is invoked on the trailing edge of the timeout only
+ * if the the debounced function is invoked more than once during the wait timeout.
+ *
+ * See David Corbacho’s article for details over the differences between _.debounce and _.throttle.
+ *
+ * @param func The function to debounce.
+ * @param wait The number of milliseconds to delay.
+ * @param options The options object.
+ * @return Returns the new debounced function.
+ */
+function debounce(func, options = {}) {
+    var _a;
+    let lastArgs;
+    let result;
+    let timerId;
+    let lastCallTime;
+    let lastInvokeTime = 0;
+    const wait = (_a = options.wait) !== null && _a !== void 0 ? _a : 0;
+    const maxWait = typeof options.maxWait === 'number' ? Math.max(options.maxWait, wait) : null;
+    function invokeFunc(time) {
+        const args = lastArgs;
+        lastArgs = undefined;
+        lastInvokeTime = time;
+        result = func(...args);
+        return result;
+    }
+    function leadingEdge(time) {
+        // Reset any `maxWait` timer.
+        lastInvokeTime = time;
+        // Start the timer for the trailing edge.
+        timerId = setTimeout(timerExpired, wait);
+        // Invoke the leading edge.
+        return result;
+    }
+    function remainingWait(time) {
+        const timeSinceLastCall = time - lastCallTime;
+        const timeSinceLastInvoke = time - lastInvokeTime;
+        const result = wait - timeSinceLastCall;
+        return maxWait === null ? result : Math.min(result, maxWait - timeSinceLastInvoke);
+    }
+    function shouldInvoke(time) {
+        const timeSinceLastCall = time - lastCallTime;
+        const timeSinceLastInvoke = time - lastInvokeTime;
+        // Either this is the first call, activity has stopped and we're at the
+        // trailing edge, the system time has gone backwards and we're treating
+        // it as the trailing edge, or we've hit the `maxWait` limit.
+        return (lastCallTime === undefined || //
+            timeSinceLastCall >= wait ||
+            timeSinceLastCall < 0 ||
+            (maxWait !== null && timeSinceLastInvoke >= maxWait));
+    }
+    function timerExpired() {
+        const time = Date.now();
+        if (shouldInvoke(time)) {
+            trailingEdge(time);
+            return;
+        }
+        // Restart the timer.
+        timerId = setTimeout(timerExpired, remainingWait(time));
+    }
+    function trailingEdge(time) {
+        timerId = undefined;
+        return invokeFunc(time);
+    }
+    function cancel() {
+        if (timerId !== undefined) {
+            clearTimeout(timerId);
+        }
+        lastInvokeTime = 0;
+        lastArgs = undefined;
+        lastCallTime = undefined;
+        timerId = undefined;
+    }
+    function flush() {
+        return timerId === undefined ? result : trailingEdge(Date.now());
+    }
+    function debounced(...args) {
+        const time = Date.now();
+        const isInvoking = shouldInvoke(time);
+        lastArgs = args;
+        lastCallTime = time;
+        if (isInvoking) {
+            if (timerId === undefined) {
+                return leadingEdge(lastCallTime);
+            }
+            if (maxWait !== null) {
+                // Handle invocations in a tight loop.
+                timerId = setTimeout(timerExpired, wait);
+                return invokeFunc(lastCallTime);
+            }
+        }
+        if (timerId === undefined) {
+            timerId = setTimeout(timerExpired, wait);
+        }
+        return result;
+    }
+    debounced.cancel = cancel;
+    debounced.flush = flush;
+    return debounced;
+}
+
+/* eslint-disable @typescript-eslint/ban-types */
+/**
+ * Verify if the input is an object literal (or class).
+ * @param input The object to verify
+ */
+function isObject(input) {
+    return typeof input === 'object' && input ? input.constructor === Object : false;
+}
+
+const primitiveTypes = ['string', 'bigint', 'number', 'boolean'];
+/**
+ * Check whether a value is a primitive
+ * @param input The input to check
+ */
+function isPrimitive(input) {
+    return primitiveTypes.includes(typeof input);
+}
+
+/**
+ * Deep clone an object
+ * @param source The object to clone
+ */
+function deepClone(source) {
+    // Check if it's a primitive (with exception of function and null, which is typeof object)
+    if (source === null || isPrimitive(source))
+        return source;
+    if (Array.isArray(source)) {
+        const output = [];
+        for (const value of source)
+            output.push(deepClone(value));
+        return output;
+    }
+    if (isObject(source)) {
+        const output = {};
+        for (const [key, value] of Object.entries(source))
+            output[key] = deepClone(value);
+        return output;
+    }
+    if (source instanceof Map) {
+        const output = new source.constructor();
+        for (const [key, value] of source.entries())
+            output.set(key, deepClone(value));
+        return output;
+    }
+    if (source instanceof Set) {
+        const output = new source.constructor();
+        for (const value of source.values())
+            output.add(deepClone(value));
+        return output;
+    }
+    return source;
+}
+
+const zws = String.fromCharCode(8203);
+/**
+ * Wraps text in a markdown inline codeblock
+ * @param expression The expression to be wrapped in the codeblock
+ */
+function inlineCodeBlock(input) {
+    return `\`${input.replace(/ /g, '\u00A0').replace(/`/g, `\`${zws}`)}\``;
+}
+
+/**
+ * Verify if the input is a class constructor.
+ * @param input The function to verify
+ */
+function isClass(input) {
+    return typeof input === 'function' && typeof input.prototype === 'object';
+}
+
+/**
+ * Verify if the input is a function.
+ * @param input The function to verify
+ */
+// eslint-disable-next-line @typescript-eslint/ban-types
+function isFunction(input) {
+    return typeof input === 'function';
+}
+
+/**
+ * Checks whether or not a value is null or undefined
+ * @param value The value to check
+ */
+function isNullOrUndefined(value) {
+    return value === undefined || value === null;
+}
+
+/**
+ * Verify if a number is a finite number.
+ * @param input The number to verify
+ */
+function isNumber(input) {
+    return typeof input === 'number' && !isNaN(input) && Number.isFinite(input);
+}
+
+/* eslint-disable @typescript-eslint/ban-types */
+function hasThen(input) {
+    return Reflect.has(input, 'then') && isFunction(input.then);
+}
+function hasCatch(input) {
+    return Reflect.has(input, 'catch') && isFunction(input.catch);
+}
+/**
+ * Verify if an object is a promise.
+ * @param input The promise to verify
+ */
+function isThenable(input) {
+    if (typeof input !== 'object' || input === null)
+        return false;
+    return input instanceof Promise || (input !== Promise.prototype && hasThen(input) && hasCatch(input));
+}
+
+/**
+ * Turn a dotted path into a json object.
+ * @param path The dotted path
+ * @param value The value
+ * @param obj The object to edit
+ */
+function makeObject(path, value, obj = {}) {
+    if (path.includes('.')) {
+        const route = path.split('.');
+        const lastKey = route.pop();
+        let reference = obj;
+        for (const key of route) {
+            if (!reference[key])
+                reference[key] = {};
+            reference = reference[key];
+        }
+        reference[lastKey] = value;
+    }
+    else {
+        obj[path] = value;
+    }
+    return obj;
+}
+
+/**
+ * Deep merges 2 objects. Properties from the second parameter are applied to the first.
+ * @remark `overwrites` is also mutated!
+ * @remark If the value of a key in `overwrites` is `undefined` then the value of that same key in `base` is used instead!
+ * @remark This is essentially `{ ...base, ...overwrites }` but recursively
+ * @param base Base object
+ * @param overwrites Overwrites to apply
+ * @example
+ * ```ts
+ * const base = { a: 0, b: 1 };
+ * const overwrites = {}; // will be { a: 0, b: 1 } after merge
+ * mergeDefault(base, overwrites) // { a: 0, b: 1 }
+ * ```
+ * @example
+ * ```ts
+ * const base = { a: 0, b: 1 };
+ * const overwrites = { a: 2, i: 3 };
+ * mergeDefault(base, overwrites) // { a: 2, i: 3, b: 1 };
+ * ```
+ * @example
+ * ```ts
+ * const base = { a: 0, b: 1 };
+ * const overwrites = { a: null };
+ * mergeDefault(base, overwrites) // { a: null, b: 1 };
+ * ```
+ * @example
+ * ```ts
+ * const base = { a: 0, b: 1 };
+ * const overwrites = { a: undefined };
+ * mergeDefault(base, overwrites) // { a: 0, b: 1 };
+ * ```
+ * @example
+ * ```ts
+ * const base = { a: null };
+ * const overwrites = { a: { b: 5 } };
+ * mergeDefault(base, overwrites) // { a: { b: 5 } };
+ * ```
+ */
+function mergeDefault(base, overwrites) {
+    // If no overwrites are specified then deep clone the base
+    if (!overwrites)
+        return deepClone(base);
+    for (const [baseKey, baseValue] of Object.entries(base)) {
+        const overwritesValueAtBaseKey = Reflect.get(overwrites, baseKey);
+        if (typeof overwritesValueAtBaseKey === 'undefined') {
+            Reflect.set(overwrites, baseKey, deepClone(baseValue));
+        }
+        else if (isObject(overwritesValueAtBaseKey)) {
+            Reflect.set(overwrites, baseKey, mergeDefault((baseValue !== null && baseValue !== void 0 ? baseValue : {}), overwritesValueAtBaseKey));
+        }
+    }
+    return overwrites;
+}
+
+/* eslint-disable @typescript-eslint/ban-types */
+/**
+ * Merges two objects
+ * @param objTarget The object to be merged
+ * @param objSource The object to merge
+ */
+function mergeObjects(objTarget, objSource) {
+    for (const [key, value] of Object.entries(objSource)) {
+        const targetValue = Reflect.get(objTarget, key);
+        if (isObject(value)) {
+            Reflect.set(objTarget, key, isObject(targetValue) ? mergeObjects(targetValue, value) : value);
+        }
+        else if (!isObject(targetValue)) {
+            Reflect.set(objTarget, key, value);
+        }
+    }
+    return objTarget;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+function noop() { }
+
+/**
+ * Convert an object to a tuple
+ * @param value The object to convert
+ * @param prefix The prefix for the key
+ */
+function objectToTuples(original, prefix = '') {
+    const entries = [];
+    for (const [key, value] of Object.entries(original)) {
+        if (isObject(value)) {
+            entries.push(...objectToTuples(value, `${prefix}${key}.`));
+        }
+        else {
+            entries.push([`${prefix}${key}`, value]);
+        }
+    }
+    return entries;
+}
+
+/**
+ * Parses an URL, returns null if invalid.
+ * @param url The url to parse
+ */
+function parseURL(url) {
+    try {
+        // @ts-expect-error URL is global in NodeJS and evergreen Browsers
+        return new URL(url);
+    }
+    catch {
+        return null;
+    }
+}
+
+/**
+ * Get an array of numbers with the selected range
+ * @param min The minimum value
+ * @param max The maximum value
+ * @param step The step value
+ */
+function range(min, max, step) {
+    return new Array(Math.floor((max - min) / step) + 1).fill(0).map((_val, i) => min + i * step);
+}
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const REGEXPESC = /[-/\\^$*+?.()|[\]{}]/g;
+/**
+ * Cleans a string from regex injection
+ * @param str The string to clean
+ */
+function regExpEsc(str) {
+    return str.replace(REGEXPESC, '\\$&');
+}
+
+/**
+ * Properly rounds up or down a number.
+ * Also supports strings using an exponent to indicate large or small numbers.
+ * @param num The number to round off
+ * @param scale The amount of decimals to retain
+ */
+function roundNumber(num, scale = 0) {
+    if (!num.toString().includes('e')) {
+        return Number(`${Math.round(Number(`${num}e+${scale}`))}e-${scale}`);
+    }
+    const arr = `${num}`.split('e');
+    let sig = '';
+    if (Number(arr[1]) + scale > 0) {
+        sig = '+';
+    }
+    return Number(`${Math.round(Number(`${Number(arr[0])}e${sig}${Number(arr[1]) + scale}`))}e-${scale}`);
+}
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const TOTITLECASE = /[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g;
+const titleCaseVariants = {
+    textchannel: 'TextChannel',
+    voicechannel: 'VoiceChannel',
+    categorychannel: 'CategoryChannel',
+    guildmember: 'GuildMember'
+};
+/**
+ * Converts a string to Title Case
+ * @description This is designed to also ensure common Discord PascalCased strings
+ * 				are put in their TitleCase titleCaseVariants. See below for the full list.
+ * @param str The string to title case
+ * @terms
+ * This table lists how certain terms are converted, these are case insensitive.
+ * Any terms not included are converted to regular Titlecase.
+ *
+ *      | Term            |    Converted To |
+ *      |-----------------|-----------------|
+ *      | textchannel     |     TextChannel |
+ *      | voicechannel    |    VoiceChannel |
+ *      | categorychannel | CategoryChannel |
+ *      | guildmember     |     GuildMember |
+ */
+function toTitleCase(str) {
+    return str.replace(TOTITLECASE, (txt) => titleCaseVariants[txt] || txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+}
+
+/* eslint-disable @typescript-eslint/ban-types */
+/**
+ * Try parse a stringified JSON string.
+ * @param value The value to parse
+ */
+function tryParse(value) {
+    try {
+        return JSON.parse(value);
+    }
+    catch (err) {
+        return value;
+    }
+}
+
+export { arrayStrictEquals, chunk, classExtends, codeBlock, cutText, debounce, deepClone, inlineCodeBlock, isClass, isFunction, isNullOrUndefined, isNullOrUndefined as isNullish, isNumber, isObject, isPrimitive, isThenable, makeObject, mergeDefault, mergeObjects, noop, objectToTuples, parseURL, range, regExpEsc, roundNumber, splitText, toTitleCase, tryParse };
 //# sourceMappingURL=index.mjs.map
