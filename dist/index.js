@@ -1,20 +1,8 @@
 "use strict";
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
-};
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
-};
 var _start, _end;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Stopwatch = void 0;
+const tslib_1 = require("tslib");
 const perf_hooks_1 = require("perf_hooks");
 /**
  * Stopwatch class, uses native node to replicate/extend performance-now dependency.
@@ -44,35 +32,35 @@ class Stopwatch {
         // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
         _end.set(this, void 0);
         this.digits = digits;
-        __classPrivateFieldSet(this, _start, perf_hooks_1.performance.now());
-        __classPrivateFieldSet(this, _end, null);
+        tslib_1.__classPrivateFieldSet(this, _start, perf_hooks_1.performance.now());
+        tslib_1.__classPrivateFieldSet(this, _end, null);
     }
     /**
      * The duration of this stopwatch since start or start to end if this stopwatch has stopped.
      */
     get duration() {
-        return __classPrivateFieldGet(this, _end) ? __classPrivateFieldGet(this, _end) - __classPrivateFieldGet(this, _start) : perf_hooks_1.performance.now() - __classPrivateFieldGet(this, _start);
+        return tslib_1.__classPrivateFieldGet(this, _end) ? tslib_1.__classPrivateFieldGet(this, _end) - tslib_1.__classPrivateFieldGet(this, _start) : perf_hooks_1.performance.now() - tslib_1.__classPrivateFieldGet(this, _start);
     }
     /**
      * If the stopwatch is running or not.
      */
     get running() {
-        return Boolean(!__classPrivateFieldGet(this, _end));
+        return Boolean(!tslib_1.__classPrivateFieldGet(this, _end));
     }
     /**
      * Restarts the stopwatch (Returns a running state)
      */
     restart() {
-        __classPrivateFieldSet(this, _start, perf_hooks_1.performance.now());
-        __classPrivateFieldSet(this, _end, null);
+        tslib_1.__classPrivateFieldSet(this, _start, perf_hooks_1.performance.now());
+        tslib_1.__classPrivateFieldSet(this, _end, null);
         return this;
     }
     /**
      * Resets the Stopwatch to 0 duration (Returns a stopped state)
      */
     reset() {
-        __classPrivateFieldSet(this, _start, perf_hooks_1.performance.now());
-        __classPrivateFieldSet(this, _end, __classPrivateFieldGet(this, _start));
+        tslib_1.__classPrivateFieldSet(this, _start, perf_hooks_1.performance.now());
+        tslib_1.__classPrivateFieldSet(this, _end, tslib_1.__classPrivateFieldGet(this, _start));
         return this;
     }
     /**
@@ -80,8 +68,8 @@ class Stopwatch {
      */
     start() {
         if (!this.running) {
-            __classPrivateFieldSet(this, _start, perf_hooks_1.performance.now() - this.duration);
-            __classPrivateFieldSet(this, _end, null);
+            tslib_1.__classPrivateFieldSet(this, _start, perf_hooks_1.performance.now() - this.duration);
+            tslib_1.__classPrivateFieldSet(this, _end, null);
         }
         return this;
     }
@@ -90,7 +78,7 @@ class Stopwatch {
      */
     stop() {
         if (this.running)
-            __classPrivateFieldSet(this, _end, perf_hooks_1.performance.now());
+            tslib_1.__classPrivateFieldSet(this, _end, perf_hooks_1.performance.now());
         return this;
     }
     /**
