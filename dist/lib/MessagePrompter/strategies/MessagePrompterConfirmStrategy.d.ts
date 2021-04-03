@@ -5,11 +5,11 @@ import type { IMessagePrompterConfirmStrategyOptions } from '../strategyOptions'
 import { MessagePrompterBaseStrategy } from './MessagePrompterBaseStrategy';
 export declare class MessagePrompterConfirmStrategy extends MessagePrompterBaseStrategy implements IMessagePrompterConfirmStrategyOptions {
     /**
-     * The cancel emoji used
+     * The confirm emoji used
      */
     confirmEmoji: string | EmojiResolvable;
     /**
-     * The confirm emoji used
+     * The cancel emoji used
      */
     cancelEmoji: string | EmojiResolvable;
     /**

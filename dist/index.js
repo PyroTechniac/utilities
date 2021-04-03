@@ -739,7 +739,7 @@ class MessagePrompterConfirmStrategy extends MessagePrompterBaseStrategy {
         var _a, _b;
         super('confirm', message, options);
         /**
-         * The cancel emoji used
+         * The confirm emoji used
          */
         Object.defineProperty(this, "confirmEmoji", {
             enumerable: true,
@@ -748,7 +748,7 @@ class MessagePrompterConfirmStrategy extends MessagePrompterBaseStrategy {
             value: void 0
         });
         /**
-         * The confirm emoji used
+         * The cancel emoji used
          */
         Object.defineProperty(this, "cancelEmoji", {
             enumerable: true,
@@ -769,7 +769,7 @@ class MessagePrompterConfirmStrategy extends MessagePrompterBaseStrategy {
     async run(channel, authorOrFilter) {
         var _a, _b, _c;
         const response = await this.collectReactions(channel, authorOrFilter, [this.confirmEmoji, this.cancelEmoji]);
-        const confirmed = ((_b = (_a = response === null || response === void 0 ? void 0 : response.emoji) === null || _a === void 0 ? void 0 : _a.id) !== null && _b !== void 0 ? _b : (_c = response === null || response === void 0 ? void 0 : response.emoji) === null || _c === void 0 ? void 0 : _c.name) === MessagePrompterConfirmStrategy.confirmEmoji;
+        const confirmed = ((_b = (_a = response === null || response === void 0 ? void 0 : response.emoji) === null || _a === void 0 ? void 0 : _a.id) !== null && _b !== void 0 ? _b : (_c = response === null || response === void 0 ? void 0 : response.emoji) === null || _c === void 0 ? void 0 : _c.name) === this.confirmEmoji;
         // prettier-ignore
         return this.explicitReturn ? { ...response, confirmed } : confirmed;
     }
