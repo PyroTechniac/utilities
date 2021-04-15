@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.eslintConfig = void 0;
 /**
- * Default ESLint configuration for Sapphire Projects
+ * Default ESLint configuration for Sapphire Communitys
  * @example
  * ```json
  * {
