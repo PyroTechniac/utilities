@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.prettierConfig = void 0;
 /**
- * Default Prettier configuration for Sapphire Projects
+ * Default Prettier configuration for Sapphire Communitys
  * @example
  * ```json
  * {
