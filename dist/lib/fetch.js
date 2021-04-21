@@ -19,7 +19,7 @@ async function fetch(url, options, type) {
     }
     const result = await node_fetch_1.default(url, options);
     if (!result.ok)
-        throw new QueryError_1.QueryError(url, result.status, result, await result.text());
+        throw new QueryError_1.QueryError(url, result.status, result, await result.clone().text());
     switch (type) {
         case "result" /* Result */:
             return result;
